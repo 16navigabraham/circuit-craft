@@ -11,7 +11,7 @@
   <meta property="og:image" content="assets/poster.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff2d3d'/%3E%3Ccircle cx='10' cy='16' r='3' fill='%23fff'/%3E%3Ccircle cx='22' cy='16' r='3' fill='%23fff'/%3E%3Cpath d='M13 16h6' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E" />
   <script>
@@ -44,7 +44,6 @@
   <nav class="menu" id="menu" aria-label="Main" hidden>
     <a href="#does">What it does</a>
     <a href="#parts">The parts</a>
-    <a href="#app">Try the app</a>
     <a href="#build">Building in public</a>
     <a href="#faq">Questions</a>
     <a href="#join" class="btn btn--primary">Join the waitlist</a>
@@ -69,7 +68,7 @@
         <div class="hero__ctas">
           <a href="#join" class="btn btn--primary btn--wide">Join the waitlist</a>
           <div class="hero__row">
-            <a href="#app" class="btn btn--outline">Try the app</a>
+            <a href="#does" class="btn btn--outline">How it works</a>
             <a href="#build" class="btn btn--outline">Follow the build</a>
           </div>
         </div>
@@ -161,48 +160,6 @@
       </div>
     </section>
 
-    <!-- TRY THE APP -->
-    <section class="section" id="app">
-      <p class="kicker kicker--accent">Try the app</p>
-      <h2 class="title">Snap blocks together.<br /><em>Watch it move.</em></h2>
-      <p class="section__sub">A small taste of the CircuitCraft app. Add blocks, press Run, then switch to Python to see the real code.</p>
-
-      <div class="pg">
-        <div class="pg__stage">
-          <div class="stage" id="stage">
-            <div class="goal" id="goal" title="Goal">★</div>
-            <div class="bot" id="bot"><span class="bot__led" id="botLed"></span><span class="bot__eye"></span></div>
-          </div>
-          <p class="pg__status" id="status">Reach the ★ and turn your LED on.</p>
-        </div>
-
-        <div class="pg__palette">
-          <button class="block block--motion" data-cmd="forward">forward</button>
-          <button class="block block--motion" data-cmd="left">turn left</button>
-          <button class="block block--motion" data-cmd="right">turn right</button>
-          <button class="block block--light" data-cmd="led">toggle LED</button>
-          <button class="block block--loop" data-cmd="repeat">repeat 2×</button>
-        </div>
-
-        <div class="pg__editor">
-          <div class="pg__tabs" role="tablist">
-            <button role="tab" class="is-active" data-view="blocks" aria-selected="true">Blocks</button>
-            <button role="tab" data-view="python" aria-selected="false">Python</button>
-          </div>
-          <div class="pg__program" data-panel="blocks">
-            <span class="block block--event">when ▶ clicked</span>
-            <ol id="program"></ol>
-          </div>
-          <pre class="pg__code mono" data-panel="python" hidden><code id="python"></code></pre>
-          <div class="pg__actions">
-            <button class="btn btn--primary btn--sm" id="run">▶ Run</button>
-            <button class="btn btn--outline btn--sm" id="example">Example</button>
-            <button class="btn btn--outline btn--sm" id="clear">Clear</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- BUILDING IN PUBLIC -->
     <section class="public" id="build">
       <video class="public__video" muted loop playsinline preload="none" poster="assets/board.jpg" aria-hidden="true">
@@ -262,7 +219,7 @@
     </div>
     <p class="footer__about">An early-stage robotics education company. Real kits and a learning app for young makers.</p>
     <nav class="footer__links" aria-label="Footer">
-      <a href="#does">What it does</a><a href="#parts">Parts</a><a href="#app">Try the app</a><a href="#faq">Questions</a><a href="#join">Waitlist</a>
+      <a href="#does">What it does</a><a href="#parts">Parts</a><a href="#faq">Questions</a><a href="#join">Waitlist</a>
     </nav>
     <p class="footer__copy">© <span id="year"></span> CircuitCraft</p>
   </footer>
