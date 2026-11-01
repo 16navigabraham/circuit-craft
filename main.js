@@ -1,31 +1,118 @@
 (() => {
-  // ----- Nav -----
-  const nav = document.querySelector('.nav');
-  const toggle = document.querySelector('.nav__toggle');
-  toggle.addEventListener('click', () => {
-    const open = nav.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', open);
-  });
-  nav.querySelectorAll('.nav__links a').forEach(a =>
-    a.addEventListener('click', () => { nav.classList.remove('is-open'); toggle.setAttribute('aria-expanded', false); })
-  );
-  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 40);
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ----- Header: scroll state, theme toggle, menu -----
+  const nav = $('.nav');
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 30);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const root = document.documentElement;
+  const themeBtn = $('#themeToggle');
+  const syncThemeLabel = () => themeBtn.setAttribute('aria-label', root.dataset.theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  syncThemeLabel();
+  themeBtn.addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('cc-theme', root.dataset.theme); } catch (e) { /* storage unavailable */ }
+    syncThemeLabel();
+  });
+
+  const menu = $('#menu');
+  const menuBtn = $('#menuToggle');
+  const setMenu = open => {
+    menu.hidden = !open;
+    nav.classList.toggle('is-open', open);
+    menuBtn.setAttribute('aria-expanded', open);
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  menuBtn.addEventListener('click', () => setMenu(menu.hidden));
+  $$('a', menu).forEach(a => a.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) setMenu(false); });
+
+  $('#year').textContent = new Date().getFullYear();
 
   // ----- Reveal on scroll -----
-  const revealEls = document.querySelectorAll('.step, .part, .anatomy__main, .specs li, .features li, .edu-list li, .faq details, .section__head, .pg > div, .app-mock');
+  const revealEls = $$('.section > .kicker, .section > .title, .section__sub, .faq details, .pg > div, .public__inner, .join__mark, .waitlist');
   revealEls.forEach(el => el.classList.add('reveal'));
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    }), { threshold: 0.15 });
     revealEls.forEach(el => io.observe(el));
   } else {
     revealEls.forEach(el => el.classList.add('is-in'));
   }
+
+  // ----- Videos -----
+  const heroVideo = $('#heroVideo');
+  const filmBtn = $('#videoToggle');
+  const setPaused = paused => {
+    filmBtn.classList.toggle('is-paused', paused);
+    filmBtn.setAttribute('aria-label', paused ? 'Play prototype film' : 'Pause prototype film');
+  };
+  if (reduceMotion) { heroVideo.removeAttribute('autoplay'); heroVideo.pause(); setPaused(true); }
+  filmBtn.addEventListener('click', () => {
+    if (heroVideo.paused) { heroVideo.play().catch(() => {}); setPaused(false); } else { heroVideo.pause(); setPaused(true); }
+  });
+  // Play the "building in public" video only while it is on screen.
+  const publicVideo = $('.public__video');
+  if (publicVideo && 'IntersectionObserver' in window && !reduceMotion) {
+    publicVideo.currentTime = 8;
+    new IntersectionObserver(([e]) => { e.isIntersecting ? publicVideo.play().catch(() => {}) : publicVideo.pause(); }, { threshold: 0.25 }).observe(publicVideo);
+  }
+
+  // ----- Carousels -----
+  $$('[data-carousel]').forEach(car => {
+    const track = $('.carousel__track', car);
+    const slides = [...track.children];
+    const dotsEl = $('.dots', car);
+    let active = 0;
+    let timer = null;
+
+    const dots = dotsEl ? slides.map((_, i) => {
+      const b = document.createElement('button');
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-label', `Slide ${i + 1}`);
+      b.addEventListener('click', () => { go(i); stop(); });
+      dotsEl.appendChild(b);
+      return b;
+    }) : [];
+
+    const go = i => {
+      i = (i + slides.length) % slides.length;
+      const s = slides[i];
+      track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.clientWidth) / 2, behavior: reduceMotion ? 'auto' : 'smooth' });
+    };
+    const mark = i => {
+      active = i;
+      slides.forEach((s, j) => s.classList.toggle('is-active', j === i));
+      dots.forEach((d, j) => { d.classList.toggle('is-active', j === i); d.setAttribute('aria-selected', j === i); });
+    };
+    const nearest = () => {
+      const center = track.scrollLeft + track.clientWidth / 2;
+      let best = 0, bestD = Infinity;
+      slides.forEach((s, i) => { const d = Math.abs(s.offsetLeft + s.clientWidth / 2 - center); if (d < bestD) { bestD = d; best = i; } });
+      return best;
+    };
+    let raf;
+    track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => mark(nearest())); }, { passive: true });
+
+    $('[data-prev]', car)?.addEventListener('click', () => { go(active - 1); stop(); });
+    $('[data-next]', car)?.addEventListener('click', () => { go(active + 1); stop(); });
+
+    const delay = Number(car.dataset.autoplay);
+    const stop = () => { clearInterval(timer); timer = null; };
+    if (delay && !reduceMotion) {
+      const start = () => { if (!timer) timer = setInterval(() => go(active + 1), delay); };
+      // Only autoplay while visible; stop for good once the user interacts.
+      new IntersectionObserver(([e]) => { e.isIntersecting ? start() : stop(); }, { threshold: 0.5 }).observe(car);
+      ['pointerdown', 'wheel', 'touchstart'].forEach(ev => track.addEventListener(ev, () => { stop(); car.dataset.autoplay = ''; }, { passive: true }));
+    }
+    mark(0);
+  });
 
   // ----- Playground -----
   const SIZE = 6;
@@ -33,25 +120,27 @@
   const START = { x: 1, y: 4, dir: 0 }; // dir: 0=up 1=right 2=down 3=left
   const DIRS = [[0, -1], [1, 0], [0, 1], [-1, 0]];
   const LABELS = {
-    forward: ['move forward', 'block--motion', 'robot.forward()'],
+    forward: ['forward', 'block--motion', 'robot.forward()'],
     left: ['turn left', 'block--motion', 'robot.turn_left()'],
     right: ['turn right', 'block--motion', 'robot.turn_right()'],
     led: ['toggle LED', 'block--light', 'led.toggle()'],
   };
   const MAX_BLOCKS = 16;
+  const HINT = 'Reach the ★ and turn your LED on.';
 
-  const programEl = document.getElementById('program');
-  const pythonEl = document.getElementById('python');
-  const bot = document.getElementById('bot');
-  const botLed = document.getElementById('botLed');
-  const goal = document.getElementById('goal');
-  const status = document.getElementById('status');
-  const runBtn = document.getElementById('run');
+  const programEl = $('#program');
+  const pythonEl = $('#python');
+  const bot = $('#bot');
+  const botLed = $('#botLed');
+  const goal = $('#goal');
+  const status = $('#status');
+  const runBtn = $('#run');
 
   let program = [];   // items: {cmd} or {cmd:'repeat', body:{cmd}}
   let state = { ...START, led: false };
   let running = false;
 
+  const setStatus = (text, win = false) => { status.textContent = text; status.classList.toggle('win', win); };
   const place = (el, x, y) => { el.style.left = `${(x / SIZE) * 100}%`; el.style.top = `${(y / SIZE) * 100}%`; };
   const drawBot = () => {
     place(bot, state.x, state.y);
@@ -63,21 +152,14 @@
   const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
   function render() {
-    programEl.innerHTML = '';
-    if (!program.length) {
-      programEl.innerHTML = '<li class="empty">Add blocks from the left…</li>';
-    }
+    programEl.innerHTML = program.length ? '' : '<li class="empty">Tap blocks to add them…</li>';
     program.forEach((item, i) => {
       const li = document.createElement('li');
       const b = document.createElement('button');
-      if (item.cmd === 'repeat') {
-        b.className = 'block block--loop';
-        b.textContent = `repeat 2 × ${LABELS[item.body.cmd][0]}`;
-      } else {
-        b.className = `block ${LABELS[item.cmd][1]}`;
-        b.textContent = LABELS[item.cmd][0];
-      }
-      b.title = 'Click to remove';
+      const base = item.cmd === 'repeat' ? item.body.cmd : item.cmd;
+      b.className = `block ${item.cmd === 'repeat' ? 'block--loop' : LABELS[base][1]}`;
+      b.textContent = item.cmd === 'repeat' ? `repeat 2 × ${LABELS[base][0]}` : LABELS[base][0];
+      b.setAttribute('aria-label', `Remove ${b.textContent}`);
       b.addEventListener('click', () => { if (running) return; program.splice(i, 1); render(); });
       li.appendChild(b);
       programEl.appendChild(li);
@@ -86,11 +168,8 @@
     const lines = ['from circuitcraft import robot, led', '', '# when ▶ clicked'];
     if (!program.length) lines.push('pass');
     program.forEach(item => {
-      if (item.cmd === 'repeat') {
-        lines.push('for _ in range(2):', `    ${LABELS[item.body.cmd][2]}`);
-      } else {
-        lines.push(LABELS[item.cmd][2]);
-      }
+      if (item.cmd === 'repeat') lines.push('for _ in range(2):', `    ${LABELS[item.body.cmd][2]}`);
+      else lines.push(LABELS[item.cmd][2]);
     });
     pythonEl.innerHTML = esc(lines.join('\n'))
       .replace(/\b(from|import|for|in)\b/g, '<span class="c-key">$1</span>')
@@ -98,33 +177,27 @@
       .replace(/\b(range|2)\b/g, '<span class="c-val">$1</span>');
   }
 
-  document.querySelectorAll('.pg__palette [data-cmd]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (running) return;
-      if (program.length >= MAX_BLOCKS) { status.textContent = `Max ${MAX_BLOCKS} blocks. Remove one first.`; return; }
-      const cmd = btn.dataset.cmd;
-      if (cmd === 'repeat') {
-        const last = program[program.length - 1];
-        if (!last || last.cmd === 'repeat') { status.textContent = 'Add a movement or LED block first, then wrap it in a repeat.'; return; }
-        program[program.length - 1] = { cmd: 'repeat', body: last };
-      } else {
-        program.push({ cmd });
-      }
-      status.classList.remove('win');
-      status.textContent = 'Reach the ★ and turn your LED on.';
-      render();
-    });
-  });
+  $$('.pg__palette [data-cmd]').forEach(btn => btn.addEventListener('click', () => {
+    if (running) return;
+    if (program.length >= MAX_BLOCKS) { setStatus(`Max ${MAX_BLOCKS} blocks. Remove one first.`); return; }
+    const cmd = btn.dataset.cmd;
+    if (cmd === 'repeat') {
+      const last = program[program.length - 1];
+      if (!last || last.cmd === 'repeat') { setStatus('Add a block first, then wrap it in a repeat.'); return; }
+      program[program.length - 1] = { cmd: 'repeat', body: last };
+    } else {
+      program.push({ cmd });
+    }
+    setStatus(HINT);
+    render();
+  }));
 
-  document.querySelectorAll('.pg__tabs button').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.pg__tabs button').forEach(t => { t.classList.toggle('is-active', t === tab); t.setAttribute('aria-selected', t === tab); });
-      document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== tab.dataset.view; });
-    });
-  });
+  $$('.pg__tabs button').forEach(tab => tab.addEventListener('click', () => {
+    $$('.pg__tabs button').forEach(t => { t.classList.toggle('is-active', t === tab); t.setAttribute('aria-selected', t === tab); });
+    $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== tab.dataset.view; });
+  }));
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
-
   function step(cmd) {
     if (cmd === 'left') state.dir = (state.dir + 3) % 4;
     else if (cmd === 'right') state.dir = (state.dir + 1) % 4;
@@ -141,15 +214,13 @@
 
   async function run() {
     if (running) return;
-    if (!program.length) { status.textContent = 'Your program is empty. Add some blocks first.'; return; }
+    if (!program.length) { setStatus('Your program is empty. Add some blocks first.'); return; }
     running = true; runBtn.disabled = true;
-    status.classList.remove('win');
     state = { ...START, led: false };
-    // disable transitions for instant reset
     bot.style.transition = 'none'; drawBot(); void bot.offsetWidth; bot.style.transition = '';
-    status.textContent = 'Running…';
+    setStatus('Running…');
     await sleep(250);
-    const lis = programEl.querySelectorAll('li');
+    const lis = $$('li', programEl);
     let bumped = false;
     outer: for (let i = 0; i < program.length; i++) {
       lis[i]?.classList.add('is-running');
@@ -162,20 +233,19 @@
       lis[i]?.classList.remove('is-running');
     }
     const atGoal = state.x === GOAL.x && state.y === GOAL.y;
-    if (bumped) status.textContent = 'Bonk! The robot hit the wall. Try a turn first.';
-    else if (atGoal && state.led) { status.textContent = '🎉 You did it! Robot reached the goal with its LED on.'; status.classList.add('win'); }
-    else if (atGoal) status.textContent = 'You made it! Now add "toggle LED" at the end.';
-    else status.textContent = 'Not quite there yet. Tweak your blocks and run again.';
+    if (bumped) setStatus('Bonk! The robot hit the wall. Try a turn first.');
+    else if (atGoal && state.led) setStatus('🎉 You did it! Goal reached with the LED on.', true);
+    else if (atGoal) setStatus('You made it! Now add "toggle LED" at the end.');
+    else setStatus('Not quite there yet. Tweak your blocks and run again.');
     running = false; runBtn.disabled = false;
   }
 
   runBtn.addEventListener('click', run);
-  document.getElementById('clear').addEventListener('click', () => {
+  $('#clear').addEventListener('click', () => {
     if (running) return;
-    program = []; state = { ...START, led: false }; drawBot(); render();
-    status.classList.remove('win'); status.textContent = 'Reach the ★ and turn your LED on.';
+    program = []; state = { ...START, led: false }; drawBot(); render(); setStatus(HINT);
   });
-  document.getElementById('example').addEventListener('click', () => {
+  $('#example').addEventListener('click', () => {
     if (running) return;
     program = [
       { cmd: 'repeat', body: { cmd: 'forward' } },
@@ -185,10 +255,8 @@
       { cmd: 'forward' },
       { cmd: 'led' },
     ];
-    render();
-    status.classList.remove('win'); status.textContent = 'Example loaded. Press ▶ Run!';
+    render(); setStatus('Example loaded. Press ▶ Run!');
   });
-
   drawBot();
   render();
 
@@ -196,9 +264,14 @@
   // To collect real signups, set this to a form endpoint (e.g. a Formspree URL).
   // Leave empty to keep the form front-end only.
   const WAITLIST_ENDPOINT = '';
-  document.querySelectorAll('form.waitlist').forEach(form => {
-    const msg = form.querySelector('.waitlist__msg');
-    const btn = form.querySelector('button[type=submit]');
+  // Set to your Instagram (or other) profile URL for the "Follow the build" button.
+  const FOLLOW_URL = '';
+  const follow = $('#followLink');
+  if (FOLLOW_URL) follow.href = FOLLOW_URL; else { follow.removeAttribute('target'); follow.href = '#join'; }
+
+  $$('form.waitlist').forEach(form => {
+    const msg = $('.waitlist__msg', form);
+    const btn = $('button[type=submit]', form);
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const email = form.email.value.trim();
@@ -209,15 +282,15 @@
       btn.disabled = true;
       try {
         if (WAITLIST_ENDPOINT) {
+          const role = form.querySelector('input[name=role]:checked')?.value || 'unspecified';
           const res = await fetch(WAITLIST_ENDPOINT, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({ email, role: form.role ? form.role.value : 'unspecified' }),
+            body: JSON.stringify({ email, role }),
           });
-          if (!res.ok) throw new Error(res.status);
+          if (!res.ok) throw new Error(String(res.status));
         }
-        msg.textContent = "You're on the list! We'll be in touch soon.";
-        form.classList.add('is-done');
+        msg.textContent = "You're on the list. We'll be in touch soon.";
         form.reset();
       } catch {
         msg.textContent = 'Something went wrong. Please try again.'; msg.classList.add('err');
@@ -226,36 +299,4 @@
       }
     });
   });
-
-  // ----- Background video -----
-  const heroVideo = document.getElementById('heroVideo');
-  const videoToggle = document.getElementById('videoToggle');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const setPaused = paused => {
-    videoToggle.classList.toggle('is-paused', paused);
-    videoToggle.setAttribute('aria-label', paused ? 'Play background video' : 'Pause background video');
-  };
-  if (reduceMotion) { heroVideo.removeAttribute('autoplay'); heroVideo.pause(); setPaused(true); }
-  videoToggle.addEventListener('click', () => {
-    if (heroVideo.paused) { heroVideo.play(); setPaused(false); } else { heroVideo.pause(); setPaused(true); }
-  });
-  // Only play the CTA video while it's on screen.
-  const ctaVideo = document.querySelector('.cta__video');
-  if (ctaVideo && 'IntersectionObserver' in window && !reduceMotion) {
-    new IntersectionObserver(([e]) => { e.isIntersecting ? ctaVideo.play().catch(() => {}) : ctaVideo.pause(); }, { threshold: 0.2 }).observe(ctaVideo);
-  } else if (ctaVideo) { ctaVideo.removeAttribute('autoplay'); }
-
-  // ----- Hotspots (tap support for touch screens) -----
-  document.querySelectorAll('.hotspot').forEach(h => h.addEventListener('click', () => {
-    const open = !h.classList.contains('is-open');
-    document.querySelectorAll('.hotspot').forEach(o => o.classList.remove('is-open'));
-    h.classList.toggle('is-open', open);
-  }));
-
-  // ----- Step card spotlight -----
-  document.querySelectorAll('.step').forEach(card => card.addEventListener('pointermove', e => {
-    const r = card.getBoundingClientRect();
-    card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-    card.style.setProperty('--my', `${e.clientY - r.top}px`);
-  }));
 })();
