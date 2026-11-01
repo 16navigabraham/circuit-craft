@@ -9,14 +9,14 @@
   nav.querySelectorAll('.nav__links a').forEach(a =>
     a.addEventListener('click', () => { nav.classList.remove('is-open'); toggle.setAttribute('aria-expanded', false); })
   );
-  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 40);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
   document.getElementById('year').textContent = new Date().getFullYear();
 
   // ----- Reveal on scroll -----
-  const revealEls = document.querySelectorAll('.step, .kit, .tile, .features li, .edu-list li, .faq details, .section__head');
+  const revealEls = document.querySelectorAll('.step, .part, .anatomy__main, .specs li, .features li, .edu-list li, .faq details, .section__head, .pg > div, .app-mock');
   revealEls.forEach(el => el.classList.add('reveal'));
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
@@ -192,17 +192,70 @@
   drawBot();
   render();
 
-  // ----- Signup (front-end only until a backend is connected) -----
-  const form = document.getElementById('signup');
-  const msg = document.getElementById('signupMsg');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      msg.textContent = 'Please enter a valid email address.'; msg.classList.add('err'); return;
-    }
-    msg.classList.remove('err');
-    msg.textContent = "You're on the list! We'll be in touch soon. 🚀";
-    form.reset();
+  // ----- Waitlist -----
+  // To collect real signups, set this to a form endpoint (e.g. a Formspree URL).
+  // Leave empty to keep the form front-end only.
+  const WAITLIST_ENDPOINT = '';
+  document.querySelectorAll('form.waitlist').forEach(form => {
+    const msg = form.querySelector('.waitlist__msg');
+    const btn = form.querySelector('button[type=submit]');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = form.email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.textContent = 'Please enter a valid email address.'; msg.classList.add('err'); form.email.focus(); return;
+      }
+      msg.classList.remove('err');
+      btn.disabled = true;
+      try {
+        if (WAITLIST_ENDPOINT) {
+          const res = await fetch(WAITLIST_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ email, role: form.role ? form.role.value : 'unspecified' }),
+          });
+          if (!res.ok) throw new Error(res.status);
+        }
+        msg.textContent = "You're on the list! We'll be in touch soon.";
+        form.classList.add('is-done');
+        form.reset();
+      } catch {
+        msg.textContent = 'Something went wrong. Please try again.'; msg.classList.add('err');
+      } finally {
+        btn.disabled = false;
+      }
+    });
   });
+
+  // ----- Background video -----
+  const heroVideo = document.getElementById('heroVideo');
+  const videoToggle = document.getElementById('videoToggle');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const setPaused = paused => {
+    videoToggle.classList.toggle('is-paused', paused);
+    videoToggle.setAttribute('aria-label', paused ? 'Play background video' : 'Pause background video');
+  };
+  if (reduceMotion) { heroVideo.removeAttribute('autoplay'); heroVideo.pause(); setPaused(true); }
+  videoToggle.addEventListener('click', () => {
+    if (heroVideo.paused) { heroVideo.play(); setPaused(false); } else { heroVideo.pause(); setPaused(true); }
+  });
+  // Only play the CTA video while it's on screen.
+  const ctaVideo = document.querySelector('.cta__video');
+  if (ctaVideo && 'IntersectionObserver' in window && !reduceMotion) {
+    new IntersectionObserver(([e]) => { e.isIntersecting ? ctaVideo.play().catch(() => {}) : ctaVideo.pause(); }, { threshold: 0.2 }).observe(ctaVideo);
+  } else if (ctaVideo) { ctaVideo.removeAttribute('autoplay'); }
+
+  // ----- Hotspots (tap support for touch screens) -----
+  document.querySelectorAll('.hotspot').forEach(h => h.addEventListener('click', () => {
+    const open = !h.classList.contains('is-open');
+    document.querySelectorAll('.hotspot').forEach(o => o.classList.remove('is-open'));
+    h.classList.toggle('is-open', open);
+  }));
+
+  // ----- Step card spotlight -----
+  document.querySelectorAll('.step').forEach(card => card.addEventListener('pointermove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    card.style.setProperty('--my', `${e.clientY - r.top}px`);
+  }));
 })();

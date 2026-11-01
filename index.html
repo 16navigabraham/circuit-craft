@@ -4,167 +4,166 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CircuitCraft — Build it. Wire it. Code it.</title>
-  <meta name="description" content="CircuitCraft robotics kits and learning software help kids build real robots, wire real circuits, and program them with drag-and-drop blocks or Python." />
+  <meta name="description" content="CircuitCraft is a robotics kit and learning app for kids. Build a real robot, wire real electronics, and program it with drag-and-drop blocks or Python. Join the waitlist." />
+  <meta property="og:title" content="CircuitCraft — Build it. Wire it. Code it." />
+  <meta property="og:description" content="A real robot kit and learning app for young makers. Join the waitlist." />
+  <meta property="og:image" content="assets/poster.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23121a33'/%3E%3Ccircle cx='10' cy='16' r='3' fill='%23ffc53d'/%3E%3Ccircle cx='22' cy='16' r='3' fill='%2322d3b6'/%3E%3Cpath d='M13 16h6' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E" />
+  <link rel="preload" as="image" href="assets/poster.jpg" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff2d3d'/%3E%3Ccircle cx='10' cy='16' r='3' fill='%23fff'/%3E%3Ccircle cx='22' cy='16' r='3' fill='%2356f07a'/%3E%3Cpath d='M13 16h6' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E" />
 </head>
 <body>
   <header class="nav" id="top">
     <div class="container nav__inner">
       <a href="#top" class="logo" aria-label="CircuitCraft home">
         <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
-          <rect width="32" height="32" rx="8" fill="var(--ink)" />
-          <circle cx="10" cy="16" r="3.2" fill="var(--sun)" />
-          <circle cx="22" cy="16" r="3.2" fill="var(--mint)" />
+          <rect width="32" height="32" rx="8" fill="var(--red)" />
+          <circle cx="10" cy="16" r="3.2" fill="#fff" />
+          <circle cx="22" cy="16" r="3.2" fill="var(--green)" />
           <path d="M13 16h6M10 8v5M22 19v5" stroke="#fff" stroke-width="2" stroke-linecap="round" />
         </svg>
         <span>CircuitCraft</span>
       </a>
       <nav class="nav__links" aria-label="Main">
+        <a href="#robot">The robot</a>
         <a href="#how">How it works</a>
-        <a href="#kits">Kits</a>
-        <a href="#software">Software</a>
-        <a href="#educators">For schools</a>
+        <a href="#playground">Playground</a>
+        <a href="#educators">Schools</a>
         <a href="#faq">FAQ</a>
       </nav>
-      <a href="#join" class="btn btn--primary btn--sm nav__cta">Get early access</a>
+      <a href="#join" class="btn btn--primary btn--sm nav__cta">Join waitlist</a>
       <button class="nav__toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
 
   <main>
-    <!-- HERO -->
+    <!-- HERO: full-bleed motion video -->
     <section class="hero">
-      <div class="container hero__grid">
-        <div class="hero__copy">
-          <p class="eyebrow"><span class="dot"></span> Robotics kits + learning software for ages 8–16</p>
-          <h1>Kids don't just play with robots.<br /><span class="hl">They build them.</span></h1>
-          <p class="lead">CircuitCraft gives young makers a box of real parts and an app that teaches them what to do with it. They snap together the circuit, wire the sensors, and bring the robot to life with drag-and-drop blocks, then move on to real Python when they're ready.</p>
-          <div class="hero__ctas">
-            <a href="#join" class="btn btn--primary">Get early access</a>
-            <a href="#playground" class="btn btn--ghost">Try the code playground →</a>
-          </div>
-          <ul class="hero__chips">
-            <li>🔌 No soldering</li>
-            <li>🧩 Blocks → Python</li>
-            <li>📚 Guided projects</li>
-          </ul>
-        </div>
+      <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/poster.jpg" aria-hidden="true">
+        <source src="assets/circuitcraft-robot.webm" type="video/webm" />
+        <source src="assets/circuitcraft-robot.mp4" type="video/mp4" />
+      </video>
+      <div class="hero__shade" aria-hidden="true"></div>
+      <svg class="hero__traces" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path class="trace" d="M-20 720 H260 L320 660 H520" stroke="var(--red)" />
+          <path class="trace" d="M1460 180 H1180 L1120 240 H960" stroke="var(--green)" />
+          <path class="trace" d="M1460 760 H1240 L1190 710 V620" stroke="rgba(255,255,255,.5)" />
+        </g>
+        <circle r="4" fill="#fff"><animateMotion dur="4s" repeatCount="indefinite" path="M-20 720 H260 L320 660 H520" /></circle>
+        <circle r="4" fill="#fff"><animateMotion dur="5s" repeatCount="indefinite" path="M1460 180 H1180 L1120 240 H960" /></circle>
+        <circle cx="520" cy="660" r="6" fill="var(--red)" /><circle cx="960" cy="240" r="6" fill="var(--green)" /><circle cx="1190" cy="620" r="6" fill="#fff" />
+      </svg>
 
-        <div class="hero__art" aria-hidden="true">
-          <svg viewBox="0 0 420 420" class="board">
-            <defs>
-              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                <circle cx="10" cy="10" r="1.4" fill="rgba(255,255,255,.18)" />
-              </pattern>
-            </defs>
-            <rect x="10" y="10" width="400" height="400" rx="36" fill="var(--board)" />
-            <rect x="10" y="10" width="400" height="400" rx="36" fill="url(#grid)" />
-            <!-- traces -->
-            <g class="traces" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-              <path class="trace t1" d="M90 120 H200 V200 H300" stroke="var(--sun)" />
-              <path class="trace t2" d="M90 300 H160 V230 H300" stroke="var(--mint)" />
-              <path class="trace t3" d="M330 120 V90 H90" stroke="var(--coral)" />
-            </g>
-            <!-- microcontroller -->
-            <g transform="translate(280 170)">
-              <rect width="90" height="90" rx="12" fill="#0b1124" stroke="#2c3a6b" stroke-width="3" />
-              <g fill="#8aa0d6">
-                <rect x="-8" y="14" width="8" height="6" /><rect x="-8" y="34" width="8" height="6" /><rect x="-8" y="54" width="8" height="6" /><rect x="-8" y="72" width="8" height="6" />
-                <rect x="90" y="14" width="8" height="6" /><rect x="90" y="34" width="8" height="6" /><rect x="90" y="54" width="8" height="6" /><rect x="90" y="72" width="8" height="6" />
-              </g>
-              <text x="45" y="52" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" fill="#cfe0ff">CC-1</text>
-            </g>
-            <!-- led -->
-            <g transform="translate(70 100)">
-              <circle class="led" cx="20" cy="20" r="18" fill="var(--sun)" />
-              <circle cx="14" cy="14" r="5" fill="#fff" opacity=".6" />
-            </g>
-            <!-- sensor -->
-            <g transform="translate(55 278)">
-              <rect width="48" height="44" rx="10" fill="var(--mint)" />
-              <circle cx="15" cy="22" r="8" fill="#0b1124" /><circle cx="33" cy="22" r="8" fill="#0b1124" />
-              <circle cx="15" cy="22" r="3" fill="#7af3df" /><circle cx="33" cy="22" r="3" fill="#7af3df" />
-            </g>
-            <!-- motor -->
-            <g transform="translate(300 60)">
-              <circle cx="30" cy="30" r="28" fill="var(--coral)" />
-              <g class="spin" style="transform-origin:30px 30px">
-                <rect x="27" y="8" width="6" height="44" rx="3" fill="#fff" />
-                <rect x="8" y="27" width="44" height="6" rx="3" fill="#fff" />
-              </g>
-            </g>
-            <!-- pulse dots -->
-            <circle r="6" fill="#fff" class="pulse"><animateMotion dur="2.6s" repeatCount="indefinite" path="M90 120 H200 V200 H300" /></circle>
-            <circle r="6" fill="#fff" class="pulse"><animateMotion dur="3.2s" repeatCount="indefinite" path="M90 300 H160 V230 H300" /></circle>
-          </svg>
-          <div class="float-card float-card--a">
-            <span class="block block--event">when ▶ clicked</span>
-            <span class="block block--loop">repeat 4</span>
-            <span class="block block--motion">move forward</span>
-          </div>
-          <div class="float-card float-card--b mono">
-            <span class="c-key">for</span> i <span class="c-key">in</span> range(4):<br />&nbsp;&nbsp;robot.forward()
-          </div>
-        </div>
+      <div class="container hero__content">
+        <p class="eyebrow"><span class="dot"></span> Robotics kit + learning app · ages 8–16</p>
+        <h1 class="hero__title">
+          <span class="line"><span>Build a real robot.</span></span>
+          <span class="line"><span>Code it <em>yourself.</em></span></span>
+        </h1>
+        <p class="lead">CircuitCraft puts real motors, sensors and a microcontroller in kids' hands, plus an app that teaches them to wire it up and bring it to life with drag-and-drop blocks or Python.</p>
+
+        <form class="waitlist" novalidate>
+          <label class="sr-only" for="heroEmail">Email address</label>
+          <input id="heroEmail" name="email" type="email" placeholder="Enter your email" autocomplete="email" required />
+          <button class="btn btn--primary" type="submit">Join the waitlist</button>
+          <p class="waitlist__msg" role="status"></p>
+        </form>
+        <p class="hero__note">Be first to get launch pricing and free sample lessons. No spam.</p>
       </div>
+
+      <button class="hero__pause" id="videoToggle" aria-label="Pause background video">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect class="i-pause" x="6" y="5" width="4" height="14" rx="1" /><rect class="i-pause" x="14" y="5" width="4" height="14" rx="1" /><path class="i-play" d="M7 5v14l12-7z" /></svg>
+      </button>
+      <a href="#robot" class="hero__scroll" aria-label="Scroll to learn more"><span></span></a>
     </section>
 
-    <!-- STRIP -->
-    <section class="strip">
-      <div class="container strip__inner">
-        <div><strong>Real parts</strong><span>Motors, sensors, LEDs, a microcontroller</span></div>
-        <div><strong>Real code</strong><span>Block coding that becomes Python</span></div>
-        <div><strong>Real skills</strong><span>Circuits, logic, problem-solving</span></div>
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>Build</span><i>✦</i><span>Wire</span><i>✦</i><span>Code</span><i>✦</i><span>Test</span><i>✦</i><span>Break it</span><i>✦</i><span>Fix it</span><i>✦</i><span>Level up</span><i>✦</i>
+        <span>Build</span><i>✦</i><span>Wire</span><i>✦</i><span>Code</span><i>✦</i><span>Test</span><i>✦</i><span>Break it</span><i>✦</i><span>Fix it</span><i>✦</i><span>Level up</span><i>✦</i>
+      </div>
+    </div>
+
+    <!-- MEET THE ROBOT -->
+    <section class="section" id="robot">
+      <div class="container">
+        <header class="section__head">
+          <p class="eyebrow">Meet the robot</p>
+          <h2>Every part is real. Every part is <span class="txt-red">theirs to understand.</span></h2>
+          <p class="lead">No sealed black box. Kids see the brain, the power and the sensors, then learn exactly how they work together.</p>
+        </header>
+
+        <div class="anatomy">
+          <figure class="anatomy__main">
+            <img src="assets/top.jpg" alt="Top view of the red CircuitCraft robot showing its battery pack, circuit board, microcontroller and wheels" loading="lazy" width="1024" height="576" />
+            <button class="hotspot" style="--x:53%;--y:15%" data-tip="Rechargeable battery pack: safe, reusable power"><span>1</span></button>
+            <button class="hotspot" style="--x:47%;--y:33%" data-tip="Motor driver: lets code control the wheels"><span>2</span></button>
+            <button class="hotspot" style="--x:56%;--y:56%" data-tip="Microcontroller: the brain kids program"><span>3</span></button>
+            <button class="hotspot" style="--x:81%;--y:46%" data-tip="Drive wheels: geared motors for precise moves"><span>4</span></button>
+          </figure>
+          <div class="anatomy__side">
+            <figure class="part">
+              <img src="assets/sensor.jpg" alt="Close-up of the ultrasonic distance sensor on the robot's front" loading="lazy" width="1024" height="576" />
+              <figcaption><strong>Ultrasonic eyes</strong><span>Measures distance so the robot can dodge obstacles.</span></figcaption>
+            </figure>
+            <figure class="part">
+              <img src="assets/board.jpg" alt="Close-up of the robot's green circuit board and wiring" loading="lazy" width="1024" height="576" />
+              <figcaption><strong>Open circuit board</strong><span>Every connection is visible and explained in the app.</span></figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <ul class="specs">
+          <li><strong>0</strong><span>soldering needed</span></li>
+          <li><strong>2</strong><span>ways to code: blocks &amp; Python</span></li>
+          <li><strong>8–16</strong><span>years, beginner to advanced</span></li>
+          <li><strong>∞</strong><span>projects to invent</span></li>
+        </ul>
       </div>
     </section>
 
     <!-- HOW IT WORKS -->
-    <section class="section" id="how">
+    <section class="section section--panel" id="how">
       <div class="container">
         <header class="section__head">
           <p class="eyebrow">How it works</p>
-          <h2>From a box of parts to a robot that thinks, in three steps.</h2>
+          <h2>From a box of parts to a robot that thinks.</h2>
         </header>
         <ol class="steps">
           <li class="step">
-            <div class="step__icon" style="--c: var(--sun)">
-              <svg viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="26" rx="5" /><path d="M6 22h36M18 14v-4h12v4" /></svg>
-            </div>
             <span class="step__num">01</span>
+            <div class="step__icon"><svg viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="26" rx="5" /><path d="M6 22h36M18 14v-4h12v4" /></svg></div>
             <h3>Build</h3>
-            <p>Open the kit and put the robot together. Snap-fit parts and colour-coded connectors mean no soldering and no tools to lose.</p>
+            <p>Assemble the chassis, wheels and board. Snap-fit parts and colour-coded connectors keep it safe and simple.</p>
           </li>
           <li class="step">
-            <div class="step__icon" style="--c: var(--mint)">
-              <svg viewBox="0 0 48 48"><circle cx="12" cy="24" r="5" /><circle cx="36" cy="14" r="5" /><circle cx="36" cy="34" r="5" /><path d="M17 24h8l6-10M25 24l6 10" /></svg>
-            </div>
             <span class="step__num">02</span>
-            <h3>Connect</h3>
-            <p>The app walks them through wiring each sensor, motor and light, and explains what every connection does and why it matters.</p>
+            <div class="step__icon"><svg viewBox="0 0 48 48"><circle cx="12" cy="24" r="5" /><circle cx="36" cy="14" r="5" /><circle cx="36" cy="34" r="5" /><path d="M17 24h8l6-10M25 24l6 10" /></svg></div>
+            <h3>Wire</h3>
+            <p>The app walks them through each sensor, motor and light, and explains what every connection does.</p>
           </li>
           <li class="step">
-            <div class="step__icon" style="--c: var(--coral)">
-              <svg viewBox="0 0 48 48"><path d="M17 14 7 24l10 10M31 14l10 10-10 10M27 10l-6 28" /></svg>
-            </div>
             <span class="step__num">03</span>
+            <div class="step__icon"><svg viewBox="0 0 48 48"><path d="M17 14 7 24l10 10M31 14l10 10-10 10M27 10l-6 28" /></svg></div>
             <h3>Code</h3>
-            <p>Bring it to life with drag-and-drop blocks. When they're ready, flip the switch and see the same program written in Python.</p>
+            <p>Bring it to life with drag-and-drop blocks, then flip the switch to see and write the same program in Python.</p>
           </li>
         </ol>
       </div>
     </section>
 
     <!-- PLAYGROUND -->
-    <section class="section section--dark" id="playground">
+    <section class="section" id="playground">
       <div class="container">
-        <header class="section__head section__head--light">
+        <header class="section__head">
           <p class="eyebrow">Try it now</p>
           <h2>Snap blocks together. Watch the robot move.</h2>
-          <p class="lead">This is a small taste of the CircuitCraft app. Add blocks, press Run, and switch to Python to see the code behind them.</p>
+          <p class="lead">A tiny taste of the CircuitCraft app. Add blocks, press Run, and switch to Python to see the real code.</p>
         </header>
 
         <div class="pg">
@@ -175,7 +174,7 @@
             <button class="block block--motion" data-cmd="right">turn right</button>
             <button class="block block--light" data-cmd="led">toggle LED</button>
             <button class="block block--loop" data-cmd="repeat">repeat 2 × (last block)</button>
-            <p class="pg__hint">Click a block to add it to your program.</p>
+            <p class="pg__hint">Click a block to add it. Click it in your program to remove it.</p>
           </div>
 
           <div class="pg__editor">
@@ -190,8 +189,8 @@
             <pre class="pg__code mono" data-panel="python" hidden><code id="python"></code></pre>
             <div class="pg__actions">
               <button class="btn btn--primary btn--sm" id="run">▶ Run</button>
-              <button class="btn btn--ghost-light btn--sm" id="clear">Clear</button>
-              <button class="btn btn--ghost-light btn--sm" id="example">Load example</button>
+              <button class="btn btn--ghost btn--sm" id="clear">Clear</button>
+              <button class="btn btn--ghost btn--sm" id="example">Load example</button>
             </div>
           </div>
 
@@ -207,116 +206,56 @@
       </div>
     </section>
 
-    <!-- KITS -->
-    <section class="section" id="kits">
-      <div class="container">
-        <header class="section__head">
-          <p class="eyebrow">The kits</p>
-          <h2>A kit for every stage of the journey.</h2>
-          <p class="lead">Each kit unlocks its own set of guided projects in the app. Kids can start at the beginning or jump in at their level.</p>
-        </header>
-        <div class="kits">
-          <article class="kit">
-            <div class="kit__img" style="--c: var(--sun)">
-              <svg viewBox="0 0 120 90"><rect x="20" y="30" width="80" height="40" rx="10" fill="#fff" /><circle cx="40" cy="74" r="10" fill="var(--ink)" /><circle cx="80" cy="74" r="10" fill="var(--ink)" /><circle cx="45" cy="48" r="6" fill="var(--ink)" /><circle cx="75" cy="48" r="6" fill="var(--ink)" /><path d="M60 30V16" stroke="var(--ink)" stroke-width="4" /><circle cx="60" cy="13" r="5" fill="var(--coral)" /></svg>
-            </div>
-            <p class="kit__age">Ages 8+</p>
-            <h3>Starter Kit</h3>
-            <p>Their first robot. They'll learn LEDs, buzzers and motors, and write their first programs with blocks.</p>
-            <ul class="ticks"><li>Microcontroller + rover chassis</li><li>LEDs, buzzer, 2 motors</li><li>12 guided projects</li></ul>
-          </article>
-          <article class="kit kit--featured">
-            <span class="badge">Most popular</span>
-            <div class="kit__img" style="--c: var(--mint)">
-              <svg viewBox="0 0 120 90"><rect x="22" y="22" width="76" height="46" rx="12" fill="#fff" /><circle cx="46" cy="44" r="9" fill="var(--ink)" /><circle cx="74" cy="44" r="9" fill="var(--ink)" /><circle cx="46" cy="44" r="3" fill="var(--mint)" /><circle cx="74" cy="44" r="3" fill="var(--mint)" /><rect x="10" y="40" width="12" height="20" rx="4" fill="var(--ink)" /><rect x="98" y="40" width="12" height="20" rx="4" fill="var(--ink)" /><path d="M40 78h40" stroke="var(--ink)" stroke-width="4" stroke-linecap="round" /></svg>
-            </div>
-            <p class="kit__age">Ages 10+</p>
-            <h3>Explorer Kit</h3>
-            <p>Robots that sense the world. Kids build line-followers and obstacle-avoiders, then start writing Python.</p>
-            <ul class="ticks"><li>Everything in Starter</li><li>Ultrasonic, light &amp; line sensors</li><li>25 guided projects + Python track</li></ul>
-          </article>
-          <article class="kit">
-            <div class="kit__img" style="--c: var(--coral)">
-              <svg viewBox="0 0 120 90"><rect x="35" y="14" width="50" height="34" rx="8" fill="#fff" /><circle cx="50" cy="31" r="5" fill="var(--ink)" /><circle cx="70" cy="31" r="5" fill="var(--ink)" /><rect x="45" y="48" width="30" height="24" rx="4" fill="#fff" /><path d="M45 56 22 44M75 56l23-12" stroke="#fff" stroke-width="6" stroke-linecap="round" /><path d="M50 72v10M70 72v10" stroke="#fff" stroke-width="6" stroke-linecap="round" /></svg>
-            </div>
-            <p class="kit__age">Ages 12+</p>
-            <h3>Inventor Kit</h3>
-            <p>For makers who want to design their own builds, with servos, a robotic arm, wireless control and open-ended challenges.</p>
-            <ul class="ticks"><li>Servos, gripper arm, Bluetooth</li><li>Expansion ports for add-ons</li><li>Python-first projects</li></ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
     <!-- SOFTWARE -->
-    <section class="section section--tint" id="software">
+    <section class="section section--panel" id="software">
       <div class="container split">
         <div>
-          <p class="eyebrow">The software</p>
-          <h2>One app that teaches, guides and grows with them.</h2>
-          <p class="lead">The CircuitCraft app is where the learning happens. It's a step-by-step coach, a circuit simulator and a code editor in one place.</p>
+          <p class="eyebrow">The app</p>
+          <h2>A coach, a circuit guide and a code editor, all in one place.</h2>
           <ul class="features">
-            <li><strong>Learn the "why"</strong><span>Short, visual lessons on electricity, sensors and logic before each build.</span></li>
-            <li><strong>Wire it with confidence</strong><span>Interactive wiring diagrams check their connections before they power up.</span></li>
-            <li><strong>Blocks, then Python</strong><span>Drag-and-drop block coding, with a live view of the matching Python code.</span></li>
-            <li><strong>Track progress</strong><span>Badges, levels and a project portfolio that parents and teachers can follow.</span></li>
+            <li><strong>Learn the "why"</strong><span>Short, visual lessons on electricity, sensors and logic before every build.</span></li>
+            <li><strong>Wire it with confidence</strong><span>Interactive diagrams check connections before they power up.</span></li>
+            <li><strong>Blocks, then Python</strong><span>Drag-and-drop coding with a live view of the matching Python.</span></li>
+            <li><strong>Track progress</strong><span>Badges, levels and a project portfolio parents and teachers can follow.</span></li>
           </ul>
         </div>
         <div class="app-mock" aria-hidden="true">
-          <div class="app-mock__bar"><span></span><span></span><span></span><em>CircuitCraft — Line Follower</em></div>
+          <div class="app-mock__bar"><span></span><span></span><span></span><em>CircuitCraft · Obstacle Dodger</em></div>
           <div class="app-mock__body">
             <aside>
               <p class="am-step is-done">1 · Build chassis</p>
-              <p class="am-step is-done">2 · Wire sensors</p>
+              <p class="am-step is-done">2 · Wire sensor</p>
               <p class="am-step is-active">3 · Code it</p>
               <p class="am-step">4 · Challenge</p>
             </aside>
-            <div class="am-code mono">
-<span class="c-com"># follow the black line</span>
+            <div class="am-code mono"><span class="c-com"># dodge anything closer than 15 cm</span>
 <span class="c-key">while</span> <span class="c-val">True</span>:
-    <span class="c-key">if</span> line.left():
-        robot.turn_left()
-    <span class="c-key">elif</span> line.right():
+    <span class="c-key">if</span> sonar.distance() &lt; <span class="c-val">15</span>:
         robot.turn_right()
     <span class="c-key">else</span>:
-        robot.forward()
-            </div>
+        robot.forward()</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- OUTCOMES -->
-    <section class="section">
-      <div class="container">
-        <header class="section__head">
-          <p class="eyebrow">What they learn</p>
-          <h2>Skills that outlast the robot.</h2>
-        </header>
-        <div class="grid4">
-          <div class="tile"><span class="tile__emoji">⚡</span><h3>Electronics</h3><p>Current, voltage, circuits and how components talk to each other.</p></div>
-          <div class="tile"><span class="tile__emoji">🧠</span><h3>Computational thinking</h3><p>Loops, conditions, variables, and breaking big problems into small ones.</p></div>
-          <div class="tile"><span class="tile__emoji">🐍</span><h3>Real programming</h3><p>A smooth path from visual blocks to text-based Python.</p></div>
-          <div class="tile"><span class="tile__emoji">🛠️</span><h3>Engineering mindset</h3><p>Build, test, break, fix, repeat. Debugging becomes part of the fun.</p></div>
-        </div>
-      </div>
-    </section>
-
     <!-- EDUCATORS -->
-    <section class="section section--sun" id="educators">
-      <div class="container split split--center">
-        <div>
-          <p class="eyebrow eyebrow--dark">For schools &amp; clubs</p>
-          <h2>Ready-made STEM lessons for the classroom.</h2>
-          <p class="lead">Classroom packs come with lesson plans, a teacher dashboard and enough kits for the whole group, so you can run robotics without needing to be an engineer.</p>
-          <a href="#join" class="btn btn--dark">Talk to us about schools</a>
+    <section class="section" id="educators">
+      <div class="container">
+        <div class="edu">
+          <div>
+            <p class="eyebrow">For schools &amp; clubs</p>
+            <h2>Run robotics without needing to be an engineer.</h2>
+            <p class="lead">Classroom packs come with lesson plans, a teacher dashboard and enough kits for the whole group.</p>
+            <a href="#join" class="btn btn--light">Join the schools waitlist</a>
+          </div>
+          <ul class="edu-list">
+            <li><strong>Lesson plans</strong> from first lesson to final project</li>
+            <li><strong>Teacher dashboard</strong> to follow every student</li>
+            <li><strong>Class packs</strong> with spare parts and storage</li>
+            <li><strong>Training</strong> and onboarding for educators</li>
+          </ul>
         </div>
-        <ul class="edu-list">
-          <li><strong>Lesson plans</strong> ready to teach, from first lesson to final project</li>
-          <li><strong>Teacher dashboard</strong> to follow every student's progress</li>
-          <li><strong>Class packs</strong> with spare parts and storage</li>
-          <li><strong>Training</strong> and onboarding support for educators</li>
-        </ul>
       </div>
     </section>
 
@@ -328,31 +267,37 @@
           <h2>Questions parents ask us.</h2>
         </header>
         <div class="faq">
-          <details><summary>Does my child need any coding experience?</summary><p>None at all. Everyone starts with drag-and-drop blocks and guided projects. Python comes in gradually, once the ideas are familiar.</p></details>
+          <details><summary>Does my child need any coding experience?</summary><p>None at all. Everyone starts with drag-and-drop blocks and guided projects, and Python comes in gradually once the ideas click.</p></details>
           <details><summary>Is soldering or special tooling required?</summary><p>No. Parts snap together and connectors are colour-coded, so kids can build safely at the kitchen table.</p></details>
-          <details><summary>What devices does the app run on?</summary><p>The CircuitCraft app is built for laptops and tablets. Kids connect to the robot over USB or wirelessly, depending on the kit.</p></details>
-          <details><summary>What age is CircuitCraft for?</summary><p>Kits are designed for ages 8–16. Younger builders do best with an adult nearby for the first project.</p></details>
-          <details><summary>Can I use it in a school or after-school club?</summary><p>Yes. Classroom packs include lesson plans and a teacher dashboard. Get in touch below and we'll help you plan.</p></details>
+          <details><summary>What devices does the app run on?</summary><p>The CircuitCraft app is built for laptops and tablets, connecting to the robot over USB or wirelessly.</p></details>
+          <details><summary>What age is CircuitCraft for?</summary><p>Ages 8–16. Younger builders do best with an adult nearby for their first project.</p></details>
+          <details><summary>When does it launch?</summary><p>We're getting ready now. Join the waitlist and you'll be the first to hear, with early-bird pricing.</p></details>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="section cta" id="join">
+    <!-- FINAL CTA with video -->
+    <section class="cta" id="join">
+      <video class="cta__video" autoplay muted loop playsinline preload="none" poster="assets/wheel.jpg" aria-hidden="true">
+        <source src="assets/circuitcraft-robot.webm" type="video/webm" />
+        <source src="assets/circuitcraft-robot.mp4" type="video/mp4" />
+      </video>
+      <div class="cta__shade" aria-hidden="true"></div>
       <div class="container container--narrow cta__inner">
+        <p class="eyebrow"><span class="dot"></span> Early access</p>
         <h2>Be first to build with CircuitCraft.</h2>
-        <p class="lead">Join the early-access list for launch news, pre-order pricing and free sample lessons.</p>
-        <form class="signup" id="signup" novalidate>
-          <label class="sr-only" for="email">Email address</label>
-          <input id="email" type="email" placeholder="you@example.com" required />
-          <select id="role" aria-label="I am a…">
+        <p class="lead">Join the waitlist for launch news, early-bird pricing and free sample lessons.</p>
+        <form class="waitlist waitlist--center" novalidate>
+          <label class="sr-only" for="ctaEmail">Email address</label>
+          <input id="ctaEmail" name="email" type="email" placeholder="Enter your email" autocomplete="email" required />
+          <select name="role" aria-label="I am a…">
             <option value="parent">I'm a parent</option>
             <option value="educator">I'm an educator</option>
             <option value="maker">I'm a young maker</option>
           </select>
-          <button class="btn btn--primary" type="submit">Join the list</button>
+          <button class="btn btn--primary" type="submit">Join the waitlist</button>
+          <p class="waitlist__msg" role="status"></p>
         </form>
-        <p class="signup__msg" id="signupMsg" role="status"></p>
       </div>
     </section>
   </main>
@@ -360,11 +305,11 @@
   <footer class="footer">
     <div class="container footer__inner">
       <div>
-        <a href="#top" class="logo logo--light"><span>CircuitCraft</span></a>
+        <a href="#top" class="logo"><span>CircuitCraft</span></a>
         <p>Robotics kits and learning software for curious kids.</p>
       </div>
       <nav aria-label="Footer">
-        <a href="#how">How it works</a><a href="#kits">Kits</a><a href="#software">Software</a><a href="#educators">Schools</a><a href="#faq">FAQ</a>
+        <a href="#robot">The robot</a><a href="#how">How it works</a><a href="#playground">Playground</a><a href="#educators">Schools</a><a href="#faq">FAQ</a>
       </nav>
       <p class="footer__copy">© <span id="year"></span> CircuitCraft. All rights reserved.</p>
     </div>
