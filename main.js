@@ -60,8 +60,16 @@
   // Play the "building in public" video only while it is on screen.
   const publicVideo = $('.public__video');
   if (publicVideo && 'IntersectionObserver' in window && !reduceMotion) {
-    publicVideo.currentTime = 8;
-    new IntersectionObserver(([e]) => { e.isIntersecting ? publicVideo.play().catch(() => {}) : publicVideo.pause(); }, { threshold: 0.25 }).observe(publicVideo);
+    // preload="none" keeps this from downloading until the section is on screen.
+    let started = false;
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        if (!started) { started = true; publicVideo.addEventListener('loadedmetadata', () => { publicVideo.currentTime = 8; }, { once: true }); }
+        publicVideo.play().catch(() => {});
+      } else {
+        publicVideo.pause();
+      }
+    }, { threshold: 0.25 }).observe(publicVideo);
   }
 
   // ----- Carousels -----
